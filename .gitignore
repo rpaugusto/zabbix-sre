@@ -1,0 +1,8 @@
+# Credenciais e configurações sensíveis
+.env
+
+# Editores
+.vscode/
+
+# Python
+__pycache__/

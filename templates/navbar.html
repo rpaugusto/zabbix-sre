@@ -1,0 +1,99 @@
+<?php 
+
+    // Helpers e variáveis padrão 
+    $navbar_items = $navbar_items ?? [ 
+        ['label' => 'Home', 'href' => base_url('/'), 'match' => ['/'], 'icon' => 'bi-house-fill'], 
+        ['label' => 'Hosts', 'href' => base_url('/hosts'), 'match' => ['/hosts*'], 'icon' => 'bi-hdd-network'], 
+        ['label' => 'Templates', 'href' => base_url('/templates'), 'match' => ['/templates*'],'icon' => 'bi-cubes'], 
+        ['label' => 'Grupos', 'href' => base_url('/groups'), 'match' => ['/groups*'], 'icon' => 'bi-collection'], 
+    ]; 
+    
+    $currentPath = function_exists('current_path') ? current_path() : parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH); 
+    
+    $activeClass = function(array $match, string $cur): string { 
+        foreach ($match as $m) { 
+            if ($m === $cur) return 'active'; 
+        
+            if (substr($m, -1) === '*' && str_starts_with($cur, rtrim($m, '*'))) { 
+                return 'active'; 
+            } 
+        } return ''; 
+    }; 
+    
+    $appName = $appName ?? (config('app.name', 'App') ?: 'App'); 
+    
+    $env = strtolower((string)config('app.env', 'production')); 
+    $isDev = in_array($env, ['development','dev','local'], true); 
+    
+    // Permissão para mostrar item Admin (visual apenas) 
+    $canAdmin = $isDev || (!empty($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'); 
+    
+?> 
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> 
+    <div class="container"> 
+        <!-- Brand --> 
+        <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/') ?>"> 
+            <i class="bi bi-rocket-fill me-2"></i> 
+            <strong><?= htmlspecialchars($appName) ?></strong> 
+            <?php if ($isDev): ?> 
+                <span class="badge bg-warning ms-2">DEV</span> 
+            <?php endif; ?> 
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <?php foreach ($navbar_items as $it): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $activeClass($it['match'] ?? [], $currentPath) ?>"
+                        href="<?= htmlspecialchars($it['href']) ?>">
+                            <?php if (!empty($it['icon'])): ?>
+                                <i class="bi <?= htmlspecialchars($it['icon']) ?> me-1"></i>
+                            <?php endif; ?>
+                            <?= htmlspecialchars($it['label']) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <!-- Navbar Actions (lado direito) -->
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <?php if ($isDev): ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="<?= base_url('/_debug/routes') ?>" target="_blank">
+                            <i class="bi bi-bug me-1"></i> Routes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-info" href="<?= base_url('/_debug/env') ?>" target="_blank">
+                            <i class="bi bi-gear me-1"></i> Env
+                        </a>
+                    </li>
+                <?php endif; ?>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('/health') ?>" target="_blank">
+                        <i class="bi bi-heart-pulse me-1"></i> Health
+                    </a>
+                </li>
+
+                <?php if ($canAdmin): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= (str_starts_with($currentPath, '/config') ? 'active' : '') ?>"
+                        href="<?= base_url('/config') ?>">
+                            <i class="bi bi-gear-fill me-1"></i> Config
+                        </a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div> 
+</nav>

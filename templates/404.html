@@ -1,0 +1,12 @@
+<h1 style="color: #e74c3c; margin-bottom: 20px;">❌ Página Não Encontrada</h1>
+    
+<div class="card">
+    <h3>Erro 404</h3>
+    <p><?= $message ?? 'A página que você está procurando não existe ou foi movida.' ?></p>
+    <a href="/" class="btn">← Voltar para Home</a>
+</div>
+
+<div class="card">
+    <p><strong>URL acessada:</strong> <?= $_SERVER['REQUEST_URI'] ?? '' ?></p>
+    <p><strong>Método:</strong> <?= $_SERVER['REQUEST_METHOD'] ?? '' ?></p>
+</div>
