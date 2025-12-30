@@ -7,7 +7,7 @@ from flask import current_app
 class ZabbixError(Exception):
     pass
 
-def zabbix_call(method: str, params: Dict[str, Any]) -> Any:
+def zabbix_call(method: str, params: Dict[str, Any], auth: bool = True) -> Any:
 
     URL = current_app.config.get("ZABBIX_API_URL", "")
     TOKEN = current_app.config.get("ZABBIX_TOKEN", "")
@@ -20,8 +20,12 @@ def zabbix_call(method: str, params: Dict[str, Any]) -> Any:
         "method": method,
         "params": params,
         "id": 1,
-        "auth": TOKEN,  # com API Token, o auth é o próprio token
     }
+    
+    if auth:
+        if not TOKEN:
+            raise ZabbixError("ZABBIX_TOKEN não configurado.")
+        payload["auth"] = "8e23cb57a408645e992b6a42933f936fddac8fc86a6016a3ad76912ba593e705" #TOKEN
 
     try:
         resp = requests.post(URL, json=payload, timeout=15)
