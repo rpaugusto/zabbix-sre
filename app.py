@@ -2,14 +2,18 @@
 from flask import Flask, request, session
 from config import Config
 from routes import bp as main_bp
+from dotenv import load_dotenv
 import datetime
 import flask
 import os
 
+load_dotenv()
 
 def create_app():
     app = Flask(__name__, static_folder="static", template_folder="templates")
     app.config.from_object(Config)
+    app.config["ZABBIX_API_URL"] = os.getenv("ZABBIX_API_URL")
+    app.config["ZABBIX_TOKEN"] = os.getenv("ZABBIX_TOKEN")
     app.secret_key = app.config.get("SECRET_KEY", "dev-secret-key")
 
     @app.context_processor
