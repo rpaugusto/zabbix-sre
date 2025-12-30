@@ -5,8 +5,8 @@
 
     <!-- Brand -->
     <a class="navbar-brand d-flex align-items-center"
-       href="{{ url_for('main.index') }}">
-      <i class="bi bi-rocket-fill me-2"></i>
+       href="{{ url_for('main.home_index') }}">
+      <img src="{{ url_for('static', filename='img/favicon.ico') }}" alt="Zabbix SRE" style="height: 18px; width: auto;" class="me-2" >
       <strong>{{ app_name }}</strong>
 
       {% if is_dev %}
@@ -32,7 +32,7 @@
 
         <li class="nav-item">
           <a class="nav-link {% if request_path == '/' %}active{% endif %}"
-             href="{{ url_for('main.index') }}">
+             href="{{ url_for('main.home_index') }}">
             <i class="bi bi-house-fill me-1"></i>
             Home
           </a>
@@ -45,8 +45,8 @@
 
         <li class="nav-item">
           <a class="nav-link {% if request_path == '/' %}active{% endif %}"
-             href="{{ url_for('main.home') }}">
-            <i class="bi bi-house-fill me-1"></i> Home
+             href="{{ url_for('main.config_index') }}">
+            <i class="bi bi-gear-fill me-1"></i> Config
           </a>
         </li>
 
