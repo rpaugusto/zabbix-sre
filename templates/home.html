@@ -3,6 +3,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1 class="display-6">Bem-vindo ao Zabbix Helper</h1>
-   <p>Aplicação Flask está rodando.</p>
+<div class="container d-flex justify-content-center align-items-center flex-grow-1">
+    <div class="card shadow-sm border-0" style="max-width: 480px; width: 100%;">
+        <div class="card-body text-center py-5">
+
+            <img 
+                src="{{ url_for('static', filename='img/logo.png') }}"
+                alt="Zabbix SRE"
+                class="mb-4"
+                style="height: 70px; width: auto;"
+            >
+
+            <h1 class="h4 fw-bold mb-2">
+                Zabbix SRE
+            </h1>
+
+            <p class="text-muted mb-3">
+                A Flask-based application designed to consume the Zabbix API, enabling monitoring, automation, and SRE operations support.
+            </p>
+
+            {% if session.get("user") %}
+                <a href="{{ url_for('main.logout') }}" class="btn btn-outline-secondary btn-sm">
+                    Logout
+                </a>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
 {% endblock %}

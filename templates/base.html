@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
     <title>{{ title }} | {{ config.get('APP_NAME', 'Zabbix Helper') }}</title>
 
@@ -27,10 +28,10 @@
 
     
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     {% include 'partials/navbar.html' %}
 
-    <main class="container my-4">
+    <main class="container my-4 flex-grow-1">
         {% block content %}{% endblock %}
     </main>
 
