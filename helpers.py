@@ -1,5 +1,6 @@
 
 # helpers.py
+from functools import wraps
 from flask import flash, redirect, url_for, session, request
 import os, secrets
 
@@ -41,3 +42,11 @@ def asset(path: str):
 
 def redirect_to(endpoint: str, **kwargs):
     return redirect(url_for(endpoint, **kwargs))
+
+def login_required(view):
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if "user" not in session:
+            return redirect(url_for("main.login"))
+        return view(*args, **kwargs)
+    return wrapped

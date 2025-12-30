@@ -10,6 +10,7 @@ import os
 def create_app():
     app = Flask(__name__, static_folder="static", template_folder="templates")
     app.config.from_object(Config)
+    app.secret_key = app.config.get("SECRET_KEY", "dev-secret-key")
 
     @app.context_processor
     def inject_globals():
@@ -26,7 +27,7 @@ def create_app():
         can_admin = is_dev or role == "admin"
 
         return {
-            "app_name": app.config.get("APP_NAME", "Zabbix Helper"),
+            "app_name": app.config.get("APP_NAME", "Zabbix SRE"),
             "current_year": datetime.datetime.now().year,
             "flask_version": flask.__version__,
             "is_dev": is_dev,
